@@ -1,0 +1,9 @@
+.git
+.env
+node_modules
+vendor
+cypress/screenshots
+cypress/videos
+storage/logs/*
+bootstrap/cache/*.php
+test-results

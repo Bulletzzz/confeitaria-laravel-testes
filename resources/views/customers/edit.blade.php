@@ -1,1 +1,1 @@
-@extends('layout') @section('content')<h1>Editar cliente</h1><form method="POST" action="{{ route('clientes.update',$customer) }}">@method('PUT') @include('customers.form')</form>@endsection
+@extends('layout') @section('content')<h1>Editar cliente</h1><form data-cy="customer-form" method="POST" action="{{ route('clientes.update',$customer) }}">@method('PUT') @include('customers.form')</form>@endsection

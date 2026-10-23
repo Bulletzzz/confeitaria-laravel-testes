@@ -1,0 +1,9 @@
+{
+    "name": "Bolo Cypress",
+    "category": "Bolos",
+    "description": "Produto utilizado nos exercícios de testes.",
+    "price": "45.90",
+    "stock": 20,
+    "minimum_stock": 5,
+    "active": true
+}

@@ -2,14 +2,33 @@ services:
   app:
     build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     env_file: .env
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - .:/var/www/html
-    command: sh -c "php artisan migrate --seed --force && php artisan serve --host=0.0.0.0 --port=8000"
+      - vendor_data:/var/www/html/vendor
+    command: sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000 --no-reload"
+  app-e2e:
+    profiles: [testing]
+    build: .
+    ports:
+      - "127.0.0.1:8001:8000"
+    env_file: .env
+    environment:
+      APP_NAME: "Doce Gestão E2E"
+      APP_URL: http://localhost:8001
+      DB_DATABASE: confeitaria_e2e
+      SESSION_COOKIE: doce_gestao_e2e_session
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/var/www/html
+      - vendor_data:/var/www/html/vendor
+    command: php artisan serve --host=0.0.0.0 --port=8000 --no-reload
   db:
     image: mysql:8.4
     environment:
@@ -18,9 +37,10 @@ services:
       MYSQL_PASSWORD: confeitaria
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./docker/mysql:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
       interval: 5s
@@ -28,3 +48,4 @@ services:
       retries: 20
 volumes:
   mysql_data:
+  vendor_data:
